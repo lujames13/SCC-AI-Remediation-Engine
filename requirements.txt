@@ -1,0 +1,8 @@
+# Vertex AI 版本（推薦用於 GCP 環境）
+google-cloud-aiplatform>=1.38.0
+
+# 原始版本（需要 Gemini API Key）
+# google-generativeai>=0.3.0
+
+# 通用依賴
+python-dotenv>=1.0.0

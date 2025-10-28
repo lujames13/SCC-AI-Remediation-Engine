@@ -1,0 +1,89 @@
+{
+  "summary": {
+    "title": "GKE Security Bulletin: CVE-2025-38083 Linux Kernel 權限提升漏洞",
+    "investigation_id": "0746aa46-7edd-4e10-8146-82b96868454a",
+    "execution_status": "INVESTIGATION_EXECUTION_STATE_COMPLETED"
+  },
+  "vulnerability": {
+    "cve_id": "CVE-2025-38083",
+    "bulletin_id": "GCP-2025-039-cos",
+    "severity": "High",
+    "severity_score": null,
+    "published_date": "2025-07-15T19:41:20Z",
+    "discovery_date": "2025-07-21T22:57:01.634Z"
+  },
+  "impact": {
+    "affected_component": "Linux kernel (Container-Optimized OS)",
+    "affected_projects": [
+      "fms-p-202411"
+    ],
+    "affected_versions": "所有低於 1.30.12-gke.1333000 的版本",
+    "vulnerability_type": "權限提升",
+    "attack_vector": "本地",
+    "impact_description": "攻擊者可以利用此漏洞在節點上獲得更高的權限。"
+  },
+  "remediation": {
+    "fixed_version": "1.30.12-gke.1333000 或更高版本",
+    "upgrade_required": true,
+    "upgrade_steps": [
+      "確認 NodePool 版本：使用 gcloud container clusters describe CLUSTER_NAME --zone=COMPUTE_ZONE --format=\"json(nodePools[].version,nodePools[].name)\" 確定當前版本。",
+      "升級 NodePool：使用 gcloud container clusters upgrade CLUSTER_NAME --node-pool=NODE_POOL_NAME --cluster-version=1.30.12-gke.1333000 --zone=COMPUTE_ZONE 升級到目標版本。",
+      "驗證漏洞修復：再次執行版本檢查命令，確認 NodePool 版本已成功升級。",
+      "監控 Security Command Center，確認 CVE-2025-38083 的高危警報是否已解除。"
+    ],
+    "upgrade_commands": [
+      "gcloud container clusters describe CLUSTER_NAME --zone=COMPUTE_ZONE --format=\"json(nodePools[].version,nodePools[].name)\"",
+      "gcloud container clusters upgrade CLUSTER_NAME --node-pool=NODE_POOL_NAME --cluster-version=1.30.12-gke.1333000 --zone=COMPUTE_ZONE"
+    ],
+    "estimated_downtime": "服務可能短暫中斷。建議在業務低峰期執行升級操作，並確保應用程式具備高可用性配置，以最大程度地減少影響。",
+    "rollback_plan": "如果升級後出現問題，可以嘗試回滾到之前的 GKE 版本，但需要評估回滾可能帶來的其他安全風險。"
+  },
+  "compensating_controls": {
+    "immediate_actions": [
+      "限制對 GKE 叢集和 GCP 資源的訪問，遵循最小權限原則。"
+    ],
+    "temporary_mitigations": [
+      "監控節點上異常的權限提升活動。"
+    ],
+    "monitoring_recommendations": [
+      "持續監控 Security Command Center 的安全警報。",
+      "定期檢查 GKE NodePool 的版本。"
+    ],
+    "detection_methods": [
+      "使用 Security Command Center 檢測可能存在的漏洞利用。"
+    ]
+  },
+  "best_practices": {
+    "prevention": [
+      "定期更新 GKE 叢集和 NodePools，訂閱 GKE 安全公告。",
+      "遵循最小權限原則，限制對 GKE 叢集和 GCP 資源的訪問。",
+      "實施強大的備份和恢復策略，以應對潛在的安全事件或數據丟失。"
+    ],
+    "automation": [
+      "啟用自動升級功能，讓 Google Cloud 自動管理叢集和節點的修補和升級。"
+    ],
+    "policy_recommendations": [
+      "定期審查和更新安全策略。"
+    ]
+  },
+  "timeline": {
+    "discovery": "2025-07-21T22:57:01.634Z",
+    "notification": "未提供",
+    "patch_available": "2025-07-15T19:41:20Z",
+    "recommended_completion": "未提供"
+  },
+  "references": {
+    "official_bulletin": "未提供",
+    "documentation": [
+      "https://cloud.google.com/kubernetes-engine/docs/how-to/upgrading-a-cluster#upgrading-nodes",
+      "https://cloud.google.com/kubernetes-engine/security-bulletins"
+    ],
+    "console_link": "https://console.cloud.google.com/gemini/cloud-assist/investigations/0746aa46-7edd-4e10-8146-82b96868454a?project=tw-rd-tam-jameslu"
+  },
+  "risk_assessment": {
+    "exploitability": "Medium",
+    "business_impact": "如果成功利用，可能導致未經授權的訪問和控制，影響應用程式和數據的安全性。",
+    "urgency": "High",
+    "recommendation": "立即將 GKE NodePool 升級到建議的版本，並實施上述補償措施和最佳實踐。"
+  }
+}
